@@ -109,3 +109,18 @@ async function editProduct(id) {
         alert(err)
     }
 }
+function addOrEdit(){
+    let id = document.getElementById('id').value;
+    if(id){
+        editProduct(id);
+    }else{
+        addProduct();
+    }
+}
+
+
+function ProjectView(id){
+    window.open(`ProjectView.html?id=${id}`, '_blank');
+}
+getData();
+addTitle()

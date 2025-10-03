@@ -42,3 +42,17 @@ router.post('/', upload.single('myFile'), (req, res) => {
     Projects[id] = Project;
     res.json(Project);
 });
+// מחיקת פרויקט
+router.delete('/:id', (req, res) => {
+    let id = Number(req.params.id);
+    if (isNaN(id)) return res.json({ message: "לא חוקי" });
+
+    let Project = Projects[id];
+    if (!Project) return res.json({ message: "לא קיים" });
+
+    if (Project.myFileName && fs.existsSync(path.join('images', Project.myFileName))) {
+        fs.unlinkSync(path.join('images', Project.myFileName));
+    }
+    Projects[id] = null;
+    res.json({ message: "ok" });
+});

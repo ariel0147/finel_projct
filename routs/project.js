@@ -110,3 +110,24 @@ router.post('/:id/like', (req, res) => {
     votedIPs[id].add(ip);
     res.json(Project);
 });
+// דיסלייק לפי IP
+router.post('/:id/dislike', (req, res) => {
+    let id = Number(req.params.id);
+    if (isNaN(id)) return res.status(400).json({ message: "לא חוקי" });
+
+    let Project = Projects[id];
+    if (!Project) return res.status(404).json({ message: "לא קיים" });
+
+    let ip = getClientIP(req);
+    votedIPs[id] = votedIPs[id] || new Set();
+
+    if (votedIPs[id].has(ip)) {
+        return res.status(403).json({ message: "כבר הצבעת" });
+    }
+
+    Project.dislikes++;
+    votedIPs[id].add(ip);
+    res.json(Project);
+});
+
+module.exports = router;

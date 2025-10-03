@@ -2,9 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Project View</title>
+    <link rel="stylesheet" href="../public/index.css">
+    <style>
+        body  {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0 auto;
+        }
+        #div1 {
+            margin: 20px;
+        }
+        #p-image {
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 0 8px #00ffff;
+            margin: 0 auto;
+        }
+        #div2 {
+            margin-top: 15px;
+        }
+        #div2 button {
+            margin-right: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #back {
+            font-size: 25px;
+            background: cyan;
+            color: #1e1e1e;
+        }
+
+        #back:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 0 25px #00ffff;
+        }
+        #like-count, #dislike-count {
+            margin-right: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
+<div id="div1">
+    <h1 id="p-name"></h1>
+    <p id="p-description"></p>
+    <img id="p-image" src="" alt="" style="max-width: 500px; max-height: 100%;">
 
+    <div id="div2">
+        <button onclick="projectLike()" id="like-p">👍🏻</button>
+        <span id="like-count">0</span>
+        <button onclick="projectNotLike()" id="not-like-p">👎🏻</button>
+        <span id="dislike-count">0</span>
+    </div>
+</div>
+
+<div id="div3">
+    <button id="back" onclick="window.location.href='index.html'">Back</button>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const p_id = urlParams.get('id');
+
+    async function Loading_project() {
+        try {
+            let res = await fetch(`/p/${p_id}`);
+            let data = await res.json();
+
+            document.getElementById("p-name").innerText = data.name;
+            document.getElementById("p-description").innerText = data.Description;
+            document.getElementById("p-image").src = data.myFileName ? `/images/${data.myFileName}` : `/default-image.png`;
+
+            // עדכון מונים
+            document.getElementById("like-count").innerText = data.likes ?? 0;
+            document.getElementById("dislike-count").innerText = data.dislikes ?? 0;
+        } catch (err) {
+            alert('טעינת הפרויקט נכשלה');
+        }
+    }
+
+    async function projectLike() {
+        try {
+            let res = await fetch(`/p/${p_id}/like`, { method: "POST" });
+            if (!res.ok) {
+                let err = await res.json();
+                alert(err.message);
+                return;
+            }
+            let data = await res.json();
+            document.getElementById("like-count").innerText = data.likes;
+            document.getElementById("dislike-count").innerText = data.dislikes;
+        } catch (err) {
+            alert("שגיאה בשליחת לייק");
+        }
+    }
+
+    async function projectNotLike() {
+        try {
+            let res = await fetch(`/p/${p_id}/dislike`, { method: "POST" });
+            if (!res.ok) {
+                let err = await res.json();
+                alert(err.message);
+                return;
+            }
+            let data = await res.json();
+            document.getElementById("like-count").innerText = data.likes;
+            document.getElementById("dislike-count").innerText = data.dislikes;
+        } catch (err) {
+            alert("שגיאה בשליחת דיסלייק");
+        }
+    }
+
+    Loading_project();
+</script>
 </body>
 </html>

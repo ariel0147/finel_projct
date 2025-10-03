@@ -24,3 +24,11 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
+function getClientIP(req) {
+    return req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+}
+
+// החזרת כל הפרויקטים
+router.get('/', (req, res) => {
+    res.json(Projects.filter(p => p));
+});

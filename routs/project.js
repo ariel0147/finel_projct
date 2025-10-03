@@ -56,3 +56,13 @@ router.delete('/:id', (req, res) => {
     Projects[id] = null;
     res.json({ message: "ok" });
 });
+// החזרת פרויקט לפי ID
+router.get('/:id', (req, res) => {
+    let id = Number(req.params.id);
+    if (isNaN(id)) return res.json({ message: "לא חוקי" });
+
+    let Project = Projects[id];
+    if (!Project) return res.json({ message: "לא קיים" });
+
+    res.json(Project);
+});

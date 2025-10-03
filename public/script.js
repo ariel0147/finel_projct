@@ -64,3 +64,15 @@ function clearInputs(){
     document.getElementById('myFile').value = "";
     document.getElementById('myImage').src = "";
 }
+async function deleteProduct(id) {
+    try{
+        if(confirm('האם אתה בטוח')){
+            await fetch(`/p/${id}`,{
+                method:'DELETE'
+            })
+            getData();
+        }
+    }catch(err){
+        alert(err)
+    }
+}

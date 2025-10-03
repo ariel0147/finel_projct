@@ -76,3 +76,15 @@ async function deleteProduct(id) {
         alert(err)
     }
 }
+async function getById(id) {
+    try{
+        let response = await fetch(`/p/${id}`);
+        let obj = await response.json();
+        document.getElementById('id').value = obj.id;
+        document.getElementById('name').value = obj.name;
+        document.getElementById('Description').value = obj.Description;
+        document.getElementById('myImage').src = "../images/"+obj.myFileName;
+    }catch(err){
+        alert(err)
+    }
+}

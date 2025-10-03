@@ -57,3 +57,10 @@ async function addProduct() {
         alert(err)
     }
 }
+function clearInputs(){
+    document.getElementById('id').value = "";
+    document.getElementById('name').value = "";
+    document.getElementById('Description').value = "";
+    document.getElementById('myFile').value = "";
+    document.getElementById('myImage').src = "";
+}

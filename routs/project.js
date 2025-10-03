@@ -32,3 +32,13 @@ function getClientIP(req) {
 router.get('/', (req, res) => {
     res.json(Projects.filter(p => p));
 });
+// יצירת פרויקט חדש
+router.post('/', upload.single('myFile'), (req, res) => {
+    let id = nextId++;
+    let name = req.body.name;
+    let Description = req.body.Description;
+    let myFileName = req.file ? req.file.filename : null;
+    let Project = { id, name, Description, myFileName, likes: 0, dislikes: 0 };
+    Projects[id] = Project;
+    res.json(Project);
+});

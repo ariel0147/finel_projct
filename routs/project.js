@@ -66,3 +66,28 @@ router.get('/:id', (req, res) => {
 
     res.json(Project);
 });
+// עדכון פרויקט
+router.patch('/:id', upload.single('myFile'), (req, res) => {
+    let id = Number(req.params.id);
+    if (isNaN(id)) return res.json({ message: "לא חוקי" });
+
+    let Project = Projects[id];
+    if (!Project) return res.json({ message: "לא קיים" });
+
+    let oldFileName = Project.myFileName;
+    let newFileName = req.file ? req.file.filename : null;
+
+    if (oldFileName && newFileName && newFileName !== oldFileName) {
+        if (fs.existsSync(path.join('images', oldFileName))) {
+            fs.unlinkSync(path.join('images', oldFileName));
+        }
+        Project.myFileName = newFileName;
+    }
+
+    let name = req.body.name;
+    let Description = req.body.Description;
+    if (name) Project.name = name;
+    if (Description) Project.Description = Description;
+
+    res.json(Project);
+});

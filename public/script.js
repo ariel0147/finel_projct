@@ -88,3 +88,24 @@ async function getById(id) {
         alert(err)
     }
 }
+async function editProduct(id) {
+    try{
+        let name = document.getElementById('name').value;
+        let Description = document.getElementById('Description').value;
+        let myFile = document.getElementById('myFile').files[0];
+        let formData = new FormData();
+        formData.append('name',name)
+        formData.append('Description',Description)
+        if(myFile){
+            formData.append('myFile',myFile)
+        }
+        await fetch(`/p/${id}`,{
+            method:'PATCH',
+            body:formData
+        })
+        getData();
+        clearInputs();
+    }catch(err){
+        alert(err)
+    }
+}
